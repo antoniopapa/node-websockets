@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "socket": "nodemon src/socket.ts",
-    "client": "nodemon src/client.ts"
+    "start": "nodemon src/index.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,6 @@
 import {Server} from "socket.io";
 
-const io = new Server(8080, {
+export const io = new Server(8080, {
     cors: {
         origin: '*'
     }
@@ -11,5 +11,9 @@ io.on('connect', (socket) => {
 
     socket.on('disconnect', () => {
         console.log(`Disconnected ${socket.id}`);
+    })
+
+    socket.on('message', (msg) => {
+        console.log(`Message: ${msg}`);
     })
 })
