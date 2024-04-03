@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import express from 'express';
 import cors from 'cors';
 import {routes} from "./routes";
@@ -6,11 +8,11 @@ import {DataSource} from "typeorm";
 
 const dataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
+    host: process.env.HOST,
     port: 3306,
-    username: "root",
-    password: "rootroot",
-    database: "node_websockets",
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
     entities: [
         "src/entities/*.ts"
     ],
