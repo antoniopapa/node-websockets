@@ -11,7 +11,9 @@ const dataSource = new DataSource({
     username: "root",
     password: "rootroot",
     database: "node_websockets",
-    entities: [],
+    entities: [
+        "src/entities/*.ts"
+    ],
     logging: false,
     synchronize: true
 });
