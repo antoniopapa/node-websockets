@@ -34,7 +34,7 @@ export const Login = async (req, res) => {
         })
     }
 
-    const jwt = sign({id: user.id}, "secret")
+    const jwt = sign({id: user.id}, process.env.JWT_SECRET)
 
     res.send({
         jwt
