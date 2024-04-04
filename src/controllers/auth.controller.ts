@@ -42,8 +42,5 @@ export const Login = async (req, res) => {
 }
 
 export const GetUser = async (req, res) => {
-    const accessToken = req.header('Authorization')?.split(" ")[1] || "";
-    const payload: any = verify(accessToken, process.env.JWT_SECRET)
-    const user = await User.findOne({where: {id: payload.id}})
-    res.send(user);
+    res.send(req["user"]);
 }
