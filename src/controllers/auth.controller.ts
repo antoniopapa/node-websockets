@@ -1,5 +1,6 @@
 import {User} from "../entities/user.entity";
 import bcryptjs from "bcryptjs";
+import {sign} from "jsonwebtoken";
 
 export const Register = async (req, res) => {
     const {password, password_confirm, ...body} = req.body
@@ -33,5 +34,9 @@ export const Login = async (req, res) => {
         })
     }
 
-    res.send(user)
+    const jwt = sign({id: user.id}, "secret")
+
+    res.send({
+        jwt
+    })
 }
