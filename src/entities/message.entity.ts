@@ -15,6 +15,11 @@ export class Message extends BaseEntity {
     @Column()
     content: string;
 
+    @Column({
+        default: 'text'
+    })
+    type: string;
+
     @CreateDateColumn()
     created_at: string;
 }
