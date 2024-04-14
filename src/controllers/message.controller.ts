@@ -4,13 +4,14 @@ import multer from "multer";
 import {extname} from 'path';
 
 export const Messages = async (req, res) => {
+    const receiver_id = req.params.id;
     const user = req["user"]
     const take = 10
     const page = parseInt(req.query.page || '1')
     const [messages, total] = await Message.findAndCount({
         where: [
-            {sender: {id: user.id}},
-            {receiver: {id: user.id}}
+            {sender: {id: user.id}, receiver: {id: receiver_id}},
+            {receiver: {id: user.id}, sender: {id: receiver_id}}
         ],
         relations: ["sender", "receiver"],
         skip: (page - 1) * take,
