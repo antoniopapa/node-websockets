@@ -14,5 +14,5 @@ export const routes = (router: Router) => {
     router.get('/api/messages', AuthMiddleware, Messages)
     router.post('/api/messages', AuthMiddleware, SendMessage)
     router.post('/api/images', AuthMiddleware, SendImage)
-    router.use('/api/images', AuthMiddleware, express.static('./uploads'))
+    router.use('/api/images', express.static('./uploads'))
 }
