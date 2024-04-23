@@ -4,15 +4,11 @@ import multer from "multer";
 import {extname} from 'path';
 
 export const Messages = async (req, res) => {
-    const receiver_id = req.params.id;
-    const user = req["user"]
+    const room = req["room"]
     const take = 10
     const page = parseInt(req.query.page || '1')
     const [messages, total] = await Message.findAndCount({
-        where: [
-            {sender: {id: user.id}, receiver: {id: receiver_id}},
-            {receiver: {id: user.id}, sender: {id: receiver_id}}
-        ],
+        where: {room},
         relations: ["sender", "receiver"],
         skip: (page - 1) * take,
         take,
@@ -27,10 +23,11 @@ export const Messages = async (req, res) => {
 
 export const SendMessage = async (req, res) => {
     const user = req["user"]
+    const room = req["room"]
 
     const message = await Message.save({
         sender: user,
-        receiver: {id: req.body.receiver_id},
+        room,
         content: req.body.content,
     })
 
@@ -41,6 +38,7 @@ export const SendMessage = async (req, res) => {
 
 export const SendImage = async (req, res) => {
     const user = req["user"]
+    const room = req["room"]
 
     const storage = multer.diskStorage({
         destination: './uploads',
@@ -59,7 +57,7 @@ export const SendImage = async (req, res) => {
 
         const message = await Message.save({
             sender: user,
-            receiver: {id: req.body.receiver_id},
+            room,
             content: `http://localhost:8000/api/images/${req.file.filename}`,
             type: 'image'
         })

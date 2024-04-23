@@ -4,6 +4,7 @@ import {GetUser, Login, Register, UpdateUser} from "./controllers/auth.controlle
 import {AuthMiddleware} from "./middlewares/auth.middleware";
 import {Users} from "./controllers/user.controller";
 import {CreateRoom, Rooms} from "./controllers/room.controller";
+import {RoomMiddleware} from "./middlewares/room.middleware";
 
 
 export const routes = (router: Router) => {
@@ -12,10 +13,10 @@ export const routes = (router: Router) => {
     router.get('/api/user', AuthMiddleware, GetUser)
     router.put('/api/user', AuthMiddleware, UpdateUser)
     router.get('/api/users', AuthMiddleware, Users)
-    router.get('/api/users/:id/messages', AuthMiddleware, Messages)
-    router.post('/api/messages', AuthMiddleware, SendMessage)
     router.post('/api/images', AuthMiddleware, SendImage)
     router.use('/api/images', express.static('./uploads'))
+    router.get('/api/rooms/:room/messages', AuthMiddleware, RoomMiddleware, Messages)
+    router.post('/api/rooms/:room/messages', AuthMiddleware, RoomMiddleware, SendMessage)
     router.get('/api/rooms', AuthMiddleware, Rooms)
     router.post('/api/rooms', AuthMiddleware, CreateRoom)
 }
