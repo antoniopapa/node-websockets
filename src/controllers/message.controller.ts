@@ -9,7 +9,7 @@ export const Messages = async (req, res) => {
     const page = parseInt(req.query.page || '1')
     const [messages, total] = await Message.findAndCount({
         where: {room},
-        relations: ["sender", "receiver"],
+        relations: ["sender"],
         skip: (page - 1) * take,
         take,
         order: {created_at: 'DESC'}
@@ -17,7 +17,8 @@ export const Messages = async (req, res) => {
 
     res.send({
         messages: messages.sort((a, b) => Date.parse(a.created_at) > Date.parse(b.created_at) ? 1 : -1),
-        total
+        total,
+        room
     })
 }
 
@@ -31,7 +32,7 @@ export const SendMessage = async (req, res) => {
         content: req.body.content,
     })
 
-    io.emit("message", message)
+    io.emit("message", message, room)
 
     res.send('success');
 }
@@ -62,7 +63,7 @@ export const SendImage = async (req, res) => {
             type: 'image'
         })
 
-        io.emit("message", message)
+        io.emit("message", message, room)
 
         res.send(message)
     })

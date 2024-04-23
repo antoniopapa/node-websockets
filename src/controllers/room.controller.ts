@@ -1,6 +1,8 @@
 import {Room} from "../entities/room.entity";
 import {User} from "../entities/user.entity";
 import {In} from "typeorm";
+import {io} from "../socket";
+import {Message} from "../entities/message.entity";
 
 export const Rooms = async (req, res) => {
     const user = req["user"]
@@ -15,6 +17,15 @@ export const Rooms = async (req, res) => {
 
     const rooms = await query.getMany()
 
+    for (let i = 0; i < rooms.length; i++){
+        rooms[i]["last_message"] = await Message.findOne({
+            where: {
+                room: {id: rooms[i].id}
+            },
+            order: {created_at: 'DESC'}
+        })
+    }
+
     res.send(rooms)
 }
 
@@ -27,7 +38,11 @@ export const CreateRoom = async (req, res) => {
 
     const members = await User.find({where: {id: In(req.body.members)}})
     room.members = [...members, user]
-    await room.save()
+    const r = await room.save()
+
+    io.on("connection", socket => {
+        socket.join(`room:${r.id}`)
+    })
 
     res.send(room)
 }
