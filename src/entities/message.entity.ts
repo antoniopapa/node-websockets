@@ -1,5 +1,6 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "./user.entity";
+import {Room} from "./room.entity";
 
 @Entity()
 export class Message extends BaseEntity {
@@ -9,8 +10,9 @@ export class Message extends BaseEntity {
     @ManyToOne(() => User)
     sender: User;
 
-    @ManyToOne(() => User)
-    receiver: User;
+    @ManyToOne(() => Room)
+    @JoinTable()
+    room: Room;
 
     @Column()
     content: string;
